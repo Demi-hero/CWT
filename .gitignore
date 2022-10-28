@@ -1,0 +1,8 @@
+Datasets/*
+Model_Assesment/*
+*.csv
+*.pickle
+*.pkl
+*.png
+.idea/*
+*docx
