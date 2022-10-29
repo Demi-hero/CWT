@@ -30,6 +30,7 @@ param_grid = {"sim_options": sim_options}
 gs = GridSearchCV(KNNWithMeans, param_grid, measures=["rmse", "mae"], cv=3, refit=True)
 gs.fit(dataset)
 print(gs.best_score["rmse"])
+print(gs.best_score['mae'])
 print(gs.best_params["rmse"])
 pred = gs.predict("UID_100062", "The_Piano_Works_Farringdon")
 print(pred.est)
