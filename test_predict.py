@@ -9,7 +9,7 @@ data = pd.read_csv("Datasets\\Cleaned_reviews.csv")
 X2 = data['lem_reviews']
 y = data['rating_review']-1
 
-pickle_load = open('randforest_test.pickle', 'rb')
+pickle_load = open('models\\randforest_test.pickle', 'rb')
 clf2 = pickle.load(pickle_load)
 
 def classify(model, strings):
