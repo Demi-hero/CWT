@@ -2,6 +2,30 @@ import re
 import string
 import contractions
 import nltk
+import matplotlib.pyplot as plt
+
+# Make sure you have downloaded the StanfordNLP English model and other essential tools using,
+# stanfordnlp.download('en')
+# nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
+
+# Intersection between the words used in the positve and negative sentiment reviews. In an attempt to help with
+# differenciating between the classes
+extra_stops = ['order', 'money', 'ordered', 'know', 'nothing', 'taste', 'came', 'quality', 'come', 'waiting', 'one',
+               'charge', 'enjoyed', 'dessert', 'try', 'starter', 'served', 'rather', 'think', 'little', 'dinner',
+               'poor', 'menu', 'arrived', 'definitely', 'like', 'time', 'portion', 'food', 'atmosphere', 'cocktail',
+               'area', 'meal', 'back', 'well', 'go', 'going', 'visited', 'really', 'drink', 'night', 'disappointed',
+               'expensive', 'manager', 'around', 'take', 'great', 'though', 'chip', 'felt', 'best', 'thing', 'staff',
+               'hour', 'pub', 'get', 'overall', 'better', 'london', 'make', 'value', 'fish', 'got', 'said', 'price',
+               'lot', 'even', 'also', 'special', 'however', 'course', 'review', 'waitress', 'worth', 'friendly',
+               'selection', 'bill', 'still', 'delicious', 'another', 'good', 'disappointing', 'quite', 'u', 'told',
+               'place', 'main', 'although', 'busy', 'made', 'wanted', 'visit', 'experience', 'would', 'cold', 'away',
+               'took', 'always', 'never', 'steak', 'want', 'ever', 'left', 'choice', 'recommend', 'excellent', 'day',
+               'wait', 'bit', 'first', 'eat', 'wine', 'minute', 'two', 'say', 'chicken', 'evening', 'average', 'small',
+               'ok', 'table', 'rude', 'much', 'pay', 'lovely', 'way', 'cooked', 'lunch', 'amazing', 'dish', 'side',
+               'bad', 'last', 'bar', 'plate', 'ask', 'many', 'full', 'nice', 'could', 'people', 'booked', 'waiter',
+               'asked', 'burger', 'service', 'restaurant', 'customer', 'tasty', 'attentive', 'went', 'friend', 'u']
 
 def remove_emojis(data):
     emoj = re.compile("["
@@ -46,3 +70,28 @@ def clean_text(dataframe, target_column, stop_words):
     dataframe['clean_reviews'] = [re.sub(' +', ' ', x) for x in dataframe['clean_reviews']]
     dataframe['lem_reviews'] = [lematize_text(x, lemanator, w_tokenizer) for x in dataframe['clean_reviews']]
     return dataframe
+
+
+def stop_word_builder(data: object, stop_words: object) -> object:
+    most_common_words = []
+    for review_score in range(1, 6):
+        print(review_score)
+        test_data = data.loc[data['rating_review'] == review_score, :]
+        # Make a plot and save the most common
+        flat_list = [item for sublist in test_data['lem_reviews'].to_list() for item in sublist]
+        nlp_words = nltk.FreqDist(flat_list)
+        most_common_words += [nlp_words.most_common(100)]
+        plt.figure(figsize=(16, 8), dpi=100)
+        plt.xticks(rotation=45)
+        plt.bar(*zip(*nlp_words.most_common(50)))
+        plt.savefig(f"rating_{review_score}_top_words.png")
+        plt.clf()
+
+    intersection = []
+    for ind in range(len(most_common_words)):
+        source = set([x[0] for x in most_common_words[ind]])
+        for ind2 in range(ind, (len(most_common_words) - 1)):
+            set2 = set([x[0] for x in most_common_words[ind2]])
+            intersection += source.intersection(set2)
+    intersection = list(set(intersection))
+    return intersection

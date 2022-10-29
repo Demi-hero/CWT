@@ -1,0 +1,15 @@
+CWT Report: 
+
+EDA: 
+Wordclouds of the top 10 and bottom 10 resteraunts food times. Shows the types of food they tend to serve
+The longer the review the less favourable it seems
+
+
+Model : Random Forest Model with an avg accuracy of 68% and weighted avg accuracy of 64%. This is a fine accuracy. But definatly room for improvement. 
+Options for improvement: 
+- Try using pre-trained Bert / Other hugging face pre-trained options
+- Use a multi-layered approach. Accuracy of prediction positve (>= 4) or negative (<=3) sentiments was very high. 
+And from based on there pass to another model that has been trained on the subset of positive and negative features.  
+
+
+Flask API: Api can receive a Json payload of arbitary length and score. Have put a wrapper around that so the wrong data type can't be sent to the api
