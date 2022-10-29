@@ -31,14 +31,14 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
 
     pipeline = Pipeline([('vect', vectorizer),
-                         ('chi',  SelectKBest(chi2, k=10)),
+                         ('chi',  SelectKBest(chi2, k=1500)),
                          ('clf', RandomForestClassifier())])
 
     paramiters = {
         'clf__n_estimators': [100, 500],
         'clf__max_features':  ['sqrt', 'log2'],
         'clf__max_depth': [4, 5, 6, 7, 8],
-        'clf__criterion':['gini', 'entropy']
+        'clf__criterion': ['gini', 'entropy']
     }
     gs = GridSearchCV(pipeline, refit=True, param_grid=paramiters)
 
@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
     ytest = np.array(y_test)
 
-    print(confusion_matrix(ytest, model.predict(X_test)))
-    print(classification_report(ytest, model.predict(X_test)))
+    print(confusion_matrix(y_test, model.predict(X_test)))
+    print(classification_report(y_test, model.predict(X_test)))
 
     vectorizer = model.named_steps['vect']
     chi = model.named_steps['chi']
