@@ -18,8 +18,10 @@ def save_model_data(model, report, outpath):
         pickle.dump(model, f)
 
     report_path = os.path.join(outpath, "model_accuracy.csv")
-    pd.DataFrame(report).to_csv(report_path, index=False)
-    return 1
+    acc_measures = pd.DataFrame(report['rf'])
+    acc_measures['version'] = outpath[-1]
+    acc_measures.to_csv(report_path)
+    return acc_measures
 
 
 def save_training_data(train_vars, train_labels, test_vars, test_labels, outpath):

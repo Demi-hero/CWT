@@ -30,7 +30,7 @@ api.add_resource(SentementClassifier, '/classifier')
 
 if __name__ == '__main__':
     # Load model
-    with open('randforest_test.pickle', 'rb') as f:
+    with open('model\\model.pickle', 'rb') as f:
         model = pickle.load(f)
 
     app.run(debug=True)
