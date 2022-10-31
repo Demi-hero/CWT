@@ -20,8 +20,8 @@ if __name__ == '__main__':
     if not os.path.isfile(model_acc):
         print("There is not accuracy data. Test the model accuracy before deployment")
 
-    new_flask_model = os.path.join("Flask", 'model', "model_new.pickle")
-    flask_model = os.path.join("Flask", 'model', "model_new.pickle")
+    new_flask_model = os.path.join("Flask", 'model', "new_model.pickle")
+    flask_model = os.path.join("Flask", 'model', "model.pickle")
     new_flask_acc = os.path.join("Flask", 'model', "new_model_accuracy.csv")
     flask_acc = os.path.join("Flask", 'model', "model_accuracy.csv")
 
@@ -33,5 +33,4 @@ if __name__ == '__main__':
         shutil.copyfile(model_file, new_flask_model)
         shutil.copyfile(model_acc, new_flask_acc)
         os.replace(new_flask_model, flask_model)
-        os.replace(flask_acc, new_flask_acc)
-
+        os.replace(new_flask_acc, flask_acc)
